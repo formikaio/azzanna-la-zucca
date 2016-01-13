@@ -1,0 +1,11 @@
+{
+  "undef": true,
+  "unused": true,
+  "esnext": true,
+  "devel": true,
+  "browser": true,
+  "predef": [ "_", "Phaser", "Hammer" ],
+
+  "maxcomplexity": 10,
+  "maxdepth": 5
+}
