@@ -11,7 +11,7 @@ var init = function () {
   var tileRows   = 8;
 
   // GRAPHIC CONFIG
-  var robotSpeed     = 200,   // ms TO WAIT X ms BEFORE MAKING A MOVE (ALSO, ANIMATION SPEED IS robotSpeed/3)
+  var robotSpeed     = 2000,   // ms TO WAIT X ms BEFORE MAKING A MOVE (ALSO, ANIMATION SPEED IS robotSpeed/3)
       tileSize       = 48,               // tile width, in pixels
       tileOffsetGrid = 16,
       tileOffsetY    = 280;
