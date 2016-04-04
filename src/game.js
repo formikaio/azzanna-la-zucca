@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 import game_utils from './game_utils.js';
-import robot_pigs_squad from './pigs/pigs_10.js';
+import robot_pigs_squad from './pigs/pigs_9.js';
 import robot_pumpkins_squad from './pumpkins/pumpkins_6.js';
 
 
@@ -121,14 +121,14 @@ var init = function () {
     round = 0;
     pigInitialPositions = [];
 
-    for (var i = 0; i < tileRows*tileRows; i++) fieldArray[i] = 0;
+    _.each(_.range(tileRows * tileRows), (item) => { fieldArray[item] = 0; });
 
     // listeners for arrow keys
     var cursors = game.input.keyboard.createCursorKeys();
-    cursors.up   .onDown.add(function () { moveMyTile(0); },this);
-    cursors.down .onDown.add(function () { moveMyTile(1); },this);
-    cursors.left .onDown.add(function () { moveMyTile(2); },this);
-    cursors.right.onDown.add(function () { moveMyTile(3); },this);
+    cursors.up   .onDown.add(function () { moveMyTile(0); }, this);
+    cursors.down .onDown.add(function () { moveMyTile(1); }, this);
+    cursors.left .onDown.add(function () { moveMyTile(2); }, this);
+    cursors.right.onDown.add(function () { moveMyTile(3); }, this);
 
     // listener for N key
     rKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
