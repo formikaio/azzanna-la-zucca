@@ -26,3 +26,4 @@
 ## RESULTS
 2016-04-04: 6v9  pigs vs 5v6 pumpkins won 786/2875 times (27%), in ~14 rounds
 2016-04-04: 6v10 pigs vs 5v6 pumpkins won 634/2663 times (24%)
+2016-04-04: 6v11 pigs vs 5v6 pumpkins won 448/1616 times (28%), in ~14 rounds
