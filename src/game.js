@@ -411,8 +411,8 @@ Press "r" on your keyboard to turn on autoplay.`);
                 break;
               }
             }
-            if(col!=i-1){
-              moveTile(item,row*tileRows+col,row*tileRows+i-1);
+            if (col !== i - 1) {
+              moveTile(item, row * tileRows + col, row * tileRows + i - 1);
             }
           }
         }
@@ -471,9 +471,8 @@ Press "r" on your keyboard to turn on autoplay.`);
         // AVERAGE, UNDERSCORE IMPLEMENTATION
         let avgwinningPigRounds =
           _.reduce(winningPigRounds, (memo, num) =>	memo + num, 0) / winningPigRounds.length;
-        console.log('On average Pigs win in ' + Math.round(avgwinningPigRounds) + ' rounds');
+        console.log(`Pigs win in ~${Math.round(avgwinningPigRounds)} rounds`);
         // console.log(winningPigRounds);
-
 
         // console.log("Pigs initial positions: " + pigInitialPositions);
         _.each(pigInitialPositions, (item) => {
@@ -490,8 +489,21 @@ Press "r" on your keyboard to turn on autoplay.`);
           }
           if (i < (tileRows - 1)) u += '\n';
         }
-        console.log('Pigs historical best starting positions: \n' + u);
+        // console.log('Pigs historical best starting positions: \n' + u);
       }
+
+      // SHOW PIGS DISPERSION
+      let pigRow = [];
+      let pigCol = [];
+      _.each(_.range(tileRows * tileRows), (pos) => {
+        if (fieldArray[pos] !== 1) return;
+        pigRow.push(toRow(pos));
+        pigCol.push(toCol(pos));
+      });
+
+      let dispersion = _.max(pigRow) - _.min(pigRow) + _.max(pigCol) - _.min(pigCol);
+      console.log(`Last game Dispersion: ${dispersion}`);
+
       gameReset();
     }
   }
