@@ -6,38 +6,44 @@ var pigs = {
   fieldArray: [],
   tileRows: 0,
 
-  init (game_utils) {
-    this.gu = game_utils;
-    this.fieldArray = game_utils.getFieldArray();
-    this.tileRows   = game_utils.getTileRows();
+  init(gameUtils) {
+    this.gu = gameUtils;
+    this.fieldArray = gameUtils.getFieldArray();
+    this.tileRows = gameUtils.getTileRows();
   },
 
-  squadName () {
+  squadName() {
     return this.privSquadName;
   },
 
-  pigBirthplace () {
-    console.log("PLEASE OVERRIDE THIS FUNCTION IN YOUR SQUAD");
+  pigBirthplace() {
+    console.log('PLEASE OVERRIDE THIS FUNCTION IN YOUR SQUAD');
 
-    var self = this;
+    let self = this;
 
     // CONTROLLO SPAZIO FINITO
-    if (_.indexOf(this.fieldArray, 0) == -1) {
-      return;
+    if (_.indexOf(this.fieldArray, 0) === -1) {
+      return -1;
     }
 
-    var level1 = []; // POSTI LIBERI QUALSIASI
+    let level1 = []; // POSTI LIBERI QUALSIASI
 
     // POPULATE FREE SPOTS
-    _.each(_.range(this.tileRows*this.tileRows), function(pos) {
-      if (self.fieldArray[pos]===0) {
+    _.each(_.range(this.tileRows * this.tileRows), function(pos) {
+      if (self.fieldArray[pos] === 0) {
         level1.push(pos);
       }
     });
 
     // SELEZIONO UNA POSIZIONE CASUALE TRA QUELLE LIBERE
     return _.sample(level1);
-  }
+  },
+
+  pigMoves() {
+      console.log('PLEASE OVERRIDE THIS FUNCTION IN YOUR SQUAD');
+      return [0, 0, 0, 0];
+  },
 };
+
 
 export default pigs;

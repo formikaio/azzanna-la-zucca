@@ -38,4 +38,102 @@ mypigs.pigBirthplace = function () {
     return _.sample(level_used);
 };
 
+mypigs.pigMoves = function () {
+    let moveQuality = [0, 0, 0, 0];
+
+/*
+var game_utils = this.game_utils;
+var tileSprites = {}; // TODO FIX IT PLEASE
+
+    // TEST DIREZIONE 0
+    tileSprites.sort("y",Phaser.Group.SORT_ASCENDING);
+    tileSprites.forEach(function(item) {
+      var row = toRow(item.pos);
+      var col = toCol(item.pos);
+
+      if (game_utils.is_pumpkin_around(item.pos)) {
+        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
+      } else {
+        if(row>0){
+          for(i=row-1;i>=0;i--){
+            if(fieldArray[i*tileRows+col] !== 0){
+              break;
+            }
+          }
+          if (game_utils.is_pumpkin_around((i+1)*tileRows+col)) {
+            move_quality[0] ++;
+          }
+        }
+      }
+    });
+
+    // TEST DIREZIONE 1
+    tileSprites.sort("y",Phaser.Group.SORT_DESCENDING);
+    tileSprites.forEach(function(item) {
+      var row = toRow(item.pos);
+      var col = toCol(item.pos);
+
+      if (game_utils.is_pumpkin_around(item.pos)) {
+        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
+      } else {
+        if(row<(tileRows-1)){
+          for(i=row+1;i<tileRows;i++){
+            if(fieldArray[i*tileRows+col] !== 0){
+              break;
+            }
+          }
+          if (game_utils.is_pumpkin_around((i-1)*tileRows+col)) {
+            move_quality[1] ++;
+          }
+        }
+      }
+    });
+
+    // TEST DIREZIONE 2
+    tileSprites.sort("x",Phaser.Group.SORT_ASCENDING);
+    tileSprites.forEach(function(item) {
+      var row = toRow(item.pos);
+      var col = toCol(item.pos);
+
+      if (game_utils.is_pumpkin_around(item.pos)) {
+        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
+      } else {
+        if(col>0){
+          for(i=col-1;i>=0;i--){
+            if(fieldArray[row*tileRows+i] !== 0){
+              break;
+            }
+          }
+          if (game_utils.is_pumpkin_around(row*tileRows+i+1)) {
+            move_quality[2] ++;
+          }
+        }
+      }
+    });
+
+    // TEST DIREZIONE 3
+    tileSprites.sort("x",Phaser.Group.SORT_DESCENDING);
+    tileSprites.forEach(function(item) {
+      var row = toRow(item.pos);
+      var col = toCol(item.pos);
+
+      if (game_utils.is_pumpkin_around(item.pos)) {
+        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
+      } else {
+        if(col<(tileRows-1)){
+          for(i=col+1;i<tileRows;i++){
+            if(fieldArray[row*tileRows+i] !== 0){
+              break;
+            }
+          }
+          if (game_utils.is_pumpkin_around(row*tileRows+i-1)) {
+            move_quality[3] ++;
+          }
+        }
+      }
+    });
+*/
+    return moveQuality;
+};
+
 export default mypigs;

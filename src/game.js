@@ -1,39 +1,40 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import game_utils           from "./game_utils.js";
-import robot_pigs_squad     from "./pigs/pigs_9.js";
-import robot_pumpkins_squad from "./pumpkins/pumpkins_6.js";
+import game_utils from './game_utils.js';
+import robot_pigs_squad from './pigs/pigs_10.js';
+import robot_pumpkins_squad from './pumpkins/pumpkins_6.js';
 
 
 var init = function () {
   // BOARD CONFIG
   var fieldArray = [];
-  var tileRows   = 8;
+  var tileRows = 8;
 
   // GRAPHIC CONFIG
-  var robotSpeed     = 2000,   // ms TO WAIT X ms BEFORE MAKING A MOVE (ALSO, ANIMATION SPEED IS robotSpeed/3)
+  var robotSpeed     = 200,   // ms TO WAIT X ms BEFORE MAKING A MOVE (ALSO, ANIMATION SPEED IS robotSpeed/3)
       tileSize       = 48,               // tile width, in pixels
       tileOffsetGrid = 16,
       tileOffsetY    = 280;
 
   // GRAPHIC OBJECTS AND VARS
-  var tileSprites, tilePumpkins,          // the tile sprites group
+  var tileSprites,
+      tilePumpkins,          // the tile sprites group
       rKey,                               // KEYBOARD KEY TO RESTART
       animationQueue,                     // IN ORDER TO MOVE, WAIT FOR ANIMATION QUEUE TO EMPTY
       robotPaused = true,
       timerRobot = 0,
       round = 0,                          // THE GAME STOPS AFTER 20 ROUNDS
       gameEnded,
-      score = 0, scoreText,
-      scoreBest, scoreTextBest;
-  var i, j;                               // LOOP VARS
+      score = 0,
+      scoreText,
+      scoreBest,
+      scoreTextBest;
+  var i;                               // LOOP VARS
+  var j;
   var animationSpeed = Math.round(robotSpeed / 3);
 
   // GAMEUTILS & ROBOT INIT
-  game_utils.init({
-    fieldArray: fieldArray,
-    tileRows: tileRows
-  });
+  game_utils.init({ fieldArray, tileRows });
   robot_pigs_squad.init(game_utils);
   robot_pumpkins_squad.init(game_utils);
 
@@ -45,7 +46,9 @@ var init = function () {
   var losingPigGames  = 0;
 
   // GAME RULES
-  var gameTotalRounds = 21;
+  var gameTotalRounds = 20;
+  var gameTotalPigs = 6;
+  var gameStartingPumpkins = 5;
 
   // creation of a new phaser game, with a proper width and height according to tile size
   var gameWidth  = 2*tileOffsetGrid + tileSize*tileRows;
@@ -134,7 +137,7 @@ var init = function () {
     rKey.onUp.add(changeRobot,this);
 
     // LISTENERS FOR TOUCH EVENTS
-    hammertime.on("dragend", function(ev){
+    hammertime.on('dragend', (ev) => {
       switch (ev.gesture.direction) {
         case 'up':    moveMyTile(0); break;
         case 'down':  moveMyTile(1); break;
@@ -144,18 +147,16 @@ var init = function () {
     });
 
     // sprite group declaration
-    tileSprites  = game.add.group();
+    tileSprites = game.add.group();
     tilePumpkins = game.add.group();
 
     // CREO GLI OSTACOLI (PER ORA SONO COME TILE PUMPKINS)
     let obstacles = [14, 16, 28, 35, 45, 49];
-    obstacles.forEach(function(pos) {
-      addObstacle(pos);
-    });
+    obstacles.forEach((pos) => addObstacle(pos));
 
     // ADD SOME PIGS AND PUMPKINS
-    _.each(_.range(5), function () { addPig();     });
-    _.each(_.range(3), function () { addPumpkin(); });
+    _.each(_.range(gameTotalPigs), () => addPig());
+    _.each(_.range(gameStartingPumpkins), () => addPumpkin());
 
     setScore();
 
@@ -272,198 +273,51 @@ Press "r" on your keyboard to turn on autoplay.`);
     // adding tile sprites to the group
     tilePumpkins.add(tile);
     tweenOpaque(tile);
+
+    round++;
   }
 
 
   // GIVING A NUMBER IN A 1-DIMENSION ARRAY, RETURNS THE ROW
-  function toRow(n){
-    return Math.floor(n/tileRows);
+  function toRow(n) {
+    return Math.floor(n / tileRows);
   }
 
   // GIVING A NUMBER IN A 1-DIMENSION ARRAY, RETURNS THE COLUMN
-  function toCol(n){
-    return n%tileRows;
+  function toCol(n) {
+    return n % tileRows;
   }
 
 
   // FIND BEST MOVE (0-3)
-  function bestMove () {
-
+  function bestMove() {
     // 0: up, 1: down, 2: left, 3: right
-    var move_quality = [0, 0, 0, 0];
+    var moveQuality = [0, 0, 0, 0];
 
-    var best_moves = [];
-    var best_move_quality = -1;
+    var bestMoves = [];
+    var bestMoveQuality = -1;
 
-    // TEST DIREZIONE 0
-    tileSprites.sort("y",Phaser.Group.SORT_ASCENDING);
-    tileSprites.forEach(function(item) {
-      var row = toRow(item.pos);
-      var col = toCol(item.pos);
+    moveQuality = robot_pigs_squad.pigMoves();
 
-      if (game_utils.is_pumpkin_around(item.pos)) {
-        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
-      } else {
-        if(row>0){
-          for(i=row-1;i>=0;i--){
-            if(fieldArray[i*tileRows+col] !== 0){
-              break;
-            }
-          }
-          if (game_utils.is_pumpkin_around((i+1)*tileRows+col)) {
-            move_quality[0] ++;
-          }
-        }
-      }
-    });
-
-    // TEST DIREZIONE 1
-    tileSprites.sort("y",Phaser.Group.SORT_DESCENDING);
-    tileSprites.forEach(function(item) {
-      var row = toRow(item.pos);
-      var col = toCol(item.pos);
-
-      if (game_utils.is_pumpkin_around(item.pos)) {
-        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
-      } else {
-        if(row<(tileRows-1)){
-          for(i=row+1;i<tileRows;i++){
-            if(fieldArray[i*tileRows+col] !== 0){
-              break;
-            }
-          }
-          if (game_utils.is_pumpkin_around((i-1)*tileRows+col)) {
-            move_quality[1] ++;
-          }
-        }
-      }
-    });
-
-    // TEST DIREZIONE 2
-    tileSprites.sort("x",Phaser.Group.SORT_ASCENDING);
-    tileSprites.forEach(function(item) {
-      var row = toRow(item.pos);
-      var col = toCol(item.pos);
-
-      if (game_utils.is_pumpkin_around(item.pos)) {
-        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
-      } else {
-        if(col>0){
-          for(i=col-1;i>=0;i--){
-            if(fieldArray[row*tileRows+i] !== 0){
-              break;
-            }
-          }
-          if (game_utils.is_pumpkin_around(row*tileRows+i+1)) {
-            move_quality[2] ++;
-          }
-        }
-      }
-    });
-
-    // TEST DIREZIONE 3
-    tileSprites.sort("x",Phaser.Group.SORT_DESCENDING);
-    tileSprites.forEach(function(item) {
-      var row = toRow(item.pos);
-      var col = toCol(item.pos);
-
-      if (game_utils.is_pumpkin_around(item.pos)) {
-        // QUESTO PIG MANGEREBBE IL PUMPKIN VICINO - NESSUN VALORE
-      } else {
-        if(col<(tileRows-1)){
-          for(i=col+1;i<tileRows;i++){
-            if(fieldArray[row*tileRows+i] !== 0){
-              break;
-            }
-          }
-          if (game_utils.is_pumpkin_around(row*tileRows+i-1)) {
-            move_quality[3] ++;
-          }
-        }
-      }
-    });
-
-    // SE SONO PIG v5 APPIATTISCO I PESI (QUELLI >1 DIVENTANO 1)
-    // (PROVO A DARE MENO VALORE AGLI SPOSTAMENTI)
-    /*
-    if (robot_pigs_squad == 'v5') {
-      _.each(move_quality, function(val, key) {
-        if (val > 1) {
-          move_quality[key] = 1;
-        }
-      });
-    }
-    */
-
-    // GUARDO MEGLIO 1 PASSO AVANTI
-    if (robot_pigs_squad.squadName() == 'v6' || robot_pigs_squad.squadName() == 'v7') {
-      let f;
-      f = game_utils.simulate_move(fieldArray, 0);
-      move_quality[0] = game_utils.how_many_threatened_pumpkins(f);
-      //game_utils.log_field(f);
-//      console.log(game_utils.how_many_threatened_pumpkins(f));
-      f = game_utils.simulate_move(fieldArray, 1);
-      move_quality[1] = game_utils.how_many_threatened_pumpkins(f);
-
-      f = game_utils.simulate_move(fieldArray, 2);
-      move_quality[2] = game_utils.how_many_threatened_pumpkins(f);
-
-      f = game_utils.simulate_move(fieldArray, 3);
-      move_quality[3] = game_utils.how_many_threatened_pumpkins(f);
-    }
-
-//console.log("p", move_quality);
-    // GUARDO MEGLIO 2 PASSI AVANTI (ESCLUSA MOSSA DELLE ZUCCHE)
-    if (robot_pigs_squad.squadName() == 'v8' || robot_pigs_squad.squadName() == 'v9') {
-      let f;
-      f = game_utils.simulate_move(fieldArray, 0);
-      move_quality[0] = 4*game_utils.how_many_threatened_pumpkins(f) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 0)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 1)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 2)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 3));
-      //game_utils.log_field(f);
-//      console.log(game_utils.how_many_threatened_pumpkins(f));
-      f = game_utils.simulate_move(fieldArray, 1);
-      move_quality[1] = 4*game_utils.how_many_threatened_pumpkins(f) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 0)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 1)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 2)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 3));
-
-      f = game_utils.simulate_move(fieldArray, 2);
-      move_quality[2] = 4*game_utils.how_many_threatened_pumpkins(f) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 0)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 1)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 2)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 3));
-
-      f = game_utils.simulate_move(fieldArray, 3);
-      move_quality[3] = 4*game_utils.how_many_threatened_pumpkins(f) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 0)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 1)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 2)) +
-        game_utils.how_many_threatened_pumpkins(game_utils.simulate_move(f, 3));
-    }
-//console.log("d", move_quality);
+// console.log("d", move_quality);
     // SELEZIONI LE MOSSE MIGLIORI
-    _.each(move_quality, function(val, key) {
-      if (val > best_move_quality) {
-        best_moves = [key];
-        best_move_quality = val;
-      } else if (val == best_move_quality) {
-        best_moves.push(key);
+    _.each(moveQuality, (val, key) => {
+      if (val > bestMoveQuality) {
+        bestMoves = [key];
+        bestMoveQuality = val;
+      } else if (val === bestMoveQuality) {
+        bestMoves.push(key);
       }
     });
 
     // SCELGO A CASO TRA LE MOSSE MIGLIORI
-    return (best_moves.length > 0) ? _.sample(best_moves) : _.sample([0,1,2,3]);
+    return (bestMoves.length > 0) ? _.sample(bestMoves) : _.sample([0, 1, 2, 3]);
   }
 
 
-  function moveMyTile (where) {
+  function moveMyTile(where) {
     // CHECK IF IT'S CALLED TOO EARLY
-    if (animationQueue>0){ /*checkDeath();*/ return; }
+    if (animationQueue > 0) { /* checkDeath(); */ return; }
 
     animationQueue++;
 
@@ -471,13 +325,14 @@ Press "r" on your keyboard to turn on autoplay.`);
 
     // sort a group ordering it by a property
     switch (where) {
-      case 0: tileSprites.sort("y",Phaser.Group.SORT_ASCENDING);  break;
-      case 1: tileSprites.sort("y",Phaser.Group.SORT_DESCENDING); break;
-      case 2: tileSprites.sort("x",Phaser.Group.SORT_ASCENDING);  break;
-      case 3: tileSprites.sort("x",Phaser.Group.SORT_DESCENDING); break;
+      case 0: tileSprites.sort('y', Phaser.Group.SORT_ASCENDING);  break;
+      case 1: tileSprites.sort('y', Phaser.Group.SORT_DESCENDING); break;
+      case 2: tileSprites.sort('x', Phaser.Group.SORT_ASCENDING);  break;
+      case 3: tileSprites.sort('x', Phaser.Group.SORT_DESCENDING); break;
+      default: break;
     }
 
-    tileSprites.forEach(function(item) {
+    tileSprites.forEach((item) => {
       // getting row and column starting from a one-dimensional array
       var row = toRow(item.pos);
       var col = toCol(item.pos);
@@ -562,24 +417,23 @@ Press "r" on your keyboard to turn on autoplay.`);
     // AD OGNI MOVIMENTO AGGIUNGO 1 PUMPKINS
     addPumpkin();
 
-    round++;
     animationQueue--;	// LET THE PLAYER MOVE
     checkDeath();
   }
 
 
-  function checkDeath () {
+  function checkDeath() {
+    var isEnded = false;
+    var pigWon = false;
+
     if (gameEnded) {
       return;
     }
 
-    var isEnded = false;
-    var pigWon = false;
-
     if (round >= gameTotalRounds) {
       // PUMPKINS WON
       isEnded = true;
-    } else if (score <=2) {
+    } else if (score <= 2) {
       // PIG WON
       isEnded = true;
       pigWon = true;
@@ -601,7 +455,11 @@ Press "r" on your keyboard to turn on autoplay.`);
 
       // IF PIGS WON, STORE INITIAL POSITIONS FOR SOME STATS
       if (pigWon) {
-        console.log(robot_pigs_squad.squadName() + " pigs against " + robot_pumpkins_squad.squadName() + " won " + winningPigGames + " times and lost " + losingPigGames + " times");
+        console.log(gameTotalPigs + robot_pigs_squad.squadName()
+        + " pigs against "
+        + gameStartingPumpkins + robot_pumpkins_squad.squadName()
+        + " pumpkins won "
+        + winningPigGames + "/" + (winningPigGames + losingPigGames) + " times");
 
         winningPigRounds.push(round);
 
@@ -610,23 +468,25 @@ Press "r" on your keyboard to turn on autoplay.`);
       		return memo + num;
       	}, 0) / winningPigRounds.length;
         console.log("On average Pigs win in " + Math.round(avgwinningPigRounds) + " rounds");
+        console.log(winningPigRounds);
 
-        //console.log("Pigs initial positions: " + pigInitialPositions);
+
+        // console.log("Pigs initial positions: " + pigInitialPositions);
         _.each(pigInitialPositions, function(item) {
           winningPigInitialPositions[item] += 1;
         });
 
         // PLOT BEST POSITIONS, USING SCALE 0-9
-        //var maxPositionValue = Math.max.apply(null, winningPigInitialPositions);
+        // var maxPositionValue = Math.max.apply(null, winningPigInitialPositions);
         var u = '';
         for (i=0;i<tileRows;i++) {
           for (j=0;j<tileRows;j++) {
-            //var val = Math.round(winningPigInitialPositions[i*tileRows+j] * 9 / maxPositionValue);
-            //u += (val==0) ? "-" : winningPigInitialPositions[i*tileRows+j];
+            // var val = Math.round(winningPigInitialPositions[i*tileRows+j] * 9 / maxPositionValue);
+            // u += (val==0) ? "-" : winningPigInitialPositions[i*tileRows+j];
             u += winningPigInitialPositions[i*tileRows+j];
             u += " ";
           }
-          if (i<(tileRows-1)) u += "\n";
+          if (i < (tileRows - 1)) u += "\n";
         }
         console.log("Pigs historical best starting positions: \n" + u);
 
@@ -637,25 +497,28 @@ Press "r" on your keyboard to turn on autoplay.`);
 
 
   // FUNCTION TO MOVE A TILE
-  function moveTile (tile,from,to) {
+  function moveTile(tile, from, to) {
     animationQueue++;
 
     // first, we update the array with new values
-    fieldArray[to]=fieldArray[from];
-    fieldArray[from]=0;
+    fieldArray[to] = fieldArray[from];
+    fieldArray[from] = 0;
 
-    tile.pos=to;
+    tile.pos = to;
     // then we create a tween
     game.add.tween(tile)
-      .to({x:tileSize*toCol(to)+tileOffsetGrid, y:tileSize*toRow(to)+tileOffsetGrid+tileOffsetY}, animationSpeed)
+      .to({
+        x: tileSize * toCol(to) + tileOffsetGrid,
+        y: tileSize * toRow(to) + tileOffsetGrid + tileOffsetY
+      }, animationSpeed)
       .start()
-      .onComplete.add(function(){
+      .onComplete.add(() => {
         setScore();
         animationQueue--;
       });
   }
 
-  function setScore () {
+  function setScore() {
     // SOTTRAGGO 6 OSTACOLI (INSERITI TRA I PUMPKINS TEMPORANEAMENTE)
      score = tilePumpkins.length - 6;
 
