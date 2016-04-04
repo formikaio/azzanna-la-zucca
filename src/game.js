@@ -1,8 +1,8 @@
 import _ from 'underscore';
 
-import game_utils from './game_utils.js';
-import robot_pigs_squad from './pigs/pigs_9.js';
-import robot_pumpkins_squad from './pumpkins/pumpkins_6.js';
+import gameUtils from './game_utils.js';
+import robotPigSquad from './pigs/pigs_9.js';
+import robotPumpkinsSquad from './pumpkins/pumpkins_6.js';
 
 
 var init = function () {
@@ -47,18 +47,19 @@ var init = function () {
   var gameStartingPumpkins = 5;
 
   // GAMEUTILS & ROBOT INIT
-  game_utils.init({ fieldArray, tileRows });
-  robot_pigs_squad.init(game_utils);
-  robot_pumpkins_squad.init(game_utils);
+  gameUtils.init({ fieldArray, tileRows });
+  robotPigSquad.init(gameUtils);
+  robotPumpkinsSquad.init(gameUtils);
 
   // creation of a new phaser game, with a proper width and height according to tile size
-  var gameWidth = 2 * tileOffsetGrid + tileSize * tileRows;
-  var gameHeight = 2 * tileOffsetGrid + tileSize * tileRows + tileOffsetY;
-  var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, "", {preload:onPreload, create:onCreate, update:onUpdate});
+  let gameWidth = 2 * tileOffsetGrid + tileSize * tileRows;
+  let gameHeight = 2 * tileOffsetGrid + tileSize * tileRows + tileOffsetY;
+  let game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, "",
+    { preload: onPreload, create: onCreate, update: onUpdate });
 
   for (i = 0; i < tileRows*tileRows; i++) { winningPigInitialPositions[i] = 0; }
 
-  var hammertime = new Hammer(document.body, { preventDefault:true, dragLockToAxis:true, swipe:false, transform:false });
+  let hammertime = new Hammer(document.body, { preventDefault:true, dragLockToAxis:true, swipe:false, transform:false });
 
   // THE GAME IS PRELOADING
   function onPreload() {
@@ -86,11 +87,12 @@ var init = function () {
     scoreText.x = 330 - scoreText.width / 2;
 
     // SCORE BEST LOCAL CACHE
-    scoreBest = (window.localStorage.getItem('scoreBest')) ? JSON.parse(window.localStorage.getItem('scoreBest')) : 0;
+    scoreBest = (window.localStorage.getItem('scoreBest'))
+      ? JSON.parse(window.localStorage.getItem('scoreBest')) : 0;
 
     // SCORE BEST BUTTON
     game.add.text(302, 197, "Round",{font:"20px Arial",align:"center", fill:"red"});
-    scoreTextBest = game.add.text(310, 223, ""+scoreBest, {font:"24px Arial",align:"center", fill:"red"});
+    scoreTextBest = game.add.text(310, 223, '' + scoreBest, { font: "24px Arial", align: "center", fill: "red" });
     scoreTextBest.x = 330 - scoreTextBest.width / 2;
 
     //  Unless you specifically need to support multitouch I would recommend setting this to 1
@@ -230,7 +232,7 @@ Press "r" on your keyboard to turn on autoplay.`);
 
   function addPig() {
     // CHOOSING THE BEST EMPTY TILE IN THE FIELD
-    var randomValue = robot_pigs_squad.pigBirthplace();
+    var randomValue = robotPigSquad.pigBirthplace();
 
     if (randomValue === -1) {
       return;
@@ -257,7 +259,7 @@ Press "r" on your keyboard to turn on autoplay.`);
 
   function addPumpkin() {
     // CHOOSING THE BEST EMPTY TILE IN THE FIELD
-    var randomValue = robot_pumpkins_squad.pumpkinBirthplace();
+    var randomValue = robotPumpkinsSquad.pumpkinBirthplace();
 
     if (randomValue === -1) {
       return;
@@ -300,7 +302,7 @@ Press "r" on your keyboard to turn on autoplay.`);
     var bestMoves = [];
     var bestMoveQuality = -1;
 
-    moveQuality = robot_pigs_squad.pigMoves();
+    moveQuality = robotPigSquad.pigMoves();
 
 // console.log("d", move_quality);
     // SELEZIONI LE MOSSE MIGLIORI
@@ -458,17 +460,17 @@ Press "r" on your keyboard to turn on autoplay.`);
 
       // IF PIGS WON, STORE INITIAL POSITIONS FOR SOME STATS
       if (pigWon) {
-        console.log(gameTotalPigs + robot_pigs_squad.squadName() + ' pigs vs '
-        + gameStartingPumpkins + robot_pumpkins_squad.squadName()
+        console.log(gameTotalPigs + robotPigSquad.squadName() + ' pigs vs '
+        + gameStartingPumpkins + robotPumpkinsSquad.squadName()
         + ' pumpkins won '
-        + winningPigGames + '/' + (winningPigGames + losingPigGames) + ' times');
+        + winningPigGames + '/' + (winningPigGames + losingPigGames) + ' times ('
+        + Math.round(winningPigGames * 100 / (winningPigGames + losingPigGames)) + '%)');
 
         winningPigRounds.push(round);
 
         // AVERAGE, UNDERSCORE IMPLEMENTATION
-        var avgwinningPigRounds = _.reduce(winningPigRounds, function(memo, num) {
-      		return memo + num;
-      	}, 0) / winningPigRounds.length;
+        let avgwinningPigRounds =
+          _.reduce(winningPigRounds, (memo, num) =>	memo + num, 0) / winningPigRounds.length;
         console.log('On average Pigs win in ' + Math.round(avgwinningPigRounds) + ' rounds');
         console.log(winningPigRounds);
 
