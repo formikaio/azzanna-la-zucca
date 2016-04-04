@@ -9,6 +9,8 @@
 * v7: like v2, looks better 1 step ahead
 * v8: like v4, looks better 2 steps ahead
 * v9: (*BEST) like v2, looks better 2 steps ahead
+* v10: like v9, fixed starting positions [11, 30, 32,	33,	37, 46]
+
 
 ## PUMPKINS SQUAD
 
