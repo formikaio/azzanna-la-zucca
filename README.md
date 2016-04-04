@@ -22,7 +22,15 @@ Le regole  complete del gioco sono qui:
 
 - **Phaser**, motore grafico
 - **Babel**, supporto sintassi ES2015
-- **Webpack**, generatore la build e dev server: webpack-dev-server (localhost:8080)
+- **Webpack**, generatore la build e dev server
+
+## Come si usa
+
+- $ npm install -g webpack webpack-dev-server
+- $ cd CARTELLA
+- $ npm install
+- $ webpack-dev-server
+- puntare il browser su localhost:8080
 
 ## TODO
 - pulisci i cicli for, sposta codice mossa pigs nel modulo
