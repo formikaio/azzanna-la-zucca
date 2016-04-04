@@ -11,10 +11,11 @@ var init = function () {
   var tileRows = 8;
 
   // GRAPHIC CONFIG
-  var robotSpeed     = 200,   // ms TO WAIT X ms BEFORE MAKING A MOVE (ALSO, ANIMATION SPEED IS robotSpeed/3)
-      tileSize       = 48,               // tile width, in pixels
-      tileOffsetGrid = 16,
-      tileOffsetY    = 280;
+  // ms TO WAIT X ms BEFORE MAKING A MOVE (ALSO, ANIMATION SPEED IS robotSpeed/3)
+  var robotSpeed = 200;
+  var tileSize = 48;               // tile width, in pixels
+  var tileOffsetGrid = 16;
+  var tileOffsetY = 280;
 
   // GRAPHIC OBJECTS AND VARS
   var tileSprites,
@@ -33,26 +34,26 @@ var init = function () {
   var j;
   var animationSpeed = Math.round(robotSpeed / 3);
 
-  // GAMEUTILS & ROBOT INIT
-  game_utils.init({ fieldArray, tileRows });
-  robot_pigs_squad.init(game_utils);
-  robot_pumpkins_squad.init(game_utils);
-
   // STATS
   var pigInitialPositions = [];
   var winningPigInitialPositions = [];
   var winningPigRounds = [];
   var winningPigGames = 0;
-  var losingPigGames  = 0;
+  var losingPigGames = 0;
 
   // GAME RULES
   var gameTotalRounds = 20;
   var gameTotalPigs = 6;
   var gameStartingPumpkins = 5;
 
+  // GAMEUTILS & ROBOT INIT
+  game_utils.init({ fieldArray, tileRows });
+  robot_pigs_squad.init(game_utils);
+  robot_pumpkins_squad.init(game_utils);
+
   // creation of a new phaser game, with a proper width and height according to tile size
-  var gameWidth  = 2*tileOffsetGrid + tileSize*tileRows;
-  var gameHeight = 2*tileOffsetGrid + tileSize*tileRows + tileOffsetY;
+  var gameWidth = 2 * tileOffsetGrid + tileSize * tileRows;
+  var gameHeight = 2 * tileOffsetGrid + tileSize * tileRows + tileOffsetY;
   var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, "", {preload:onPreload, create:onCreate, update:onUpdate});
 
   for (i = 0; i < tileRows*tileRows; i++) { winningPigInitialPositions[i] = 0; }
@@ -60,20 +61,20 @@ var init = function () {
   var hammertime = new Hammer(document.body, { preventDefault:true, dragLockToAxis:true, swipe:false, transform:false });
 
   // THE GAME IS PRELOADING
-  function onPreload () {
-    game.load.image("tile",         "assets/tile.png");
-    game.load.image("pig",          "assets/pig.png");
-    game.load.image("pumpkin",      "assets/pumpkin.png");
-    game.load.image("background",   "assets/background.png");
-    game.load.image('resetButton',  'assets/tile_reset.png');
-    game.load.image('infoButton',   'assets/tile_info.png');
+  function onPreload() {
+    game.load.image('tile', 'assets/tile.png');
+    game.load.image('pig', 'assets/pig.png');
+    game.load.image('pumpkin', 'assets/pumpkin.png');
+    game.load.image('background', 'assets/background.png');
+    game.load.image('resetButton', 'assets/tile_reset.png');
+    game.load.image('infoButton', 'assets/tile_info.png');
   }
 
   // THE GAME HAS BEEN CREATED
-  function onCreate () {
+  function onCreate() {
     // BACKGROUND
     game.stage.backgroundColor = 0xbbdefb;
-    game.add.image(0,0,"background");
+    game.add.image(0, 0, 'background');
 
     // BUTTONS
     game.add.button(280, 33, 'resetButton', gameReset, this);
@@ -94,9 +95,10 @@ var init = function () {
 
     //  Unless you specifically need to support multitouch I would recommend setting this to 1
     game.input.maxPointers = 1;
-    //  automatically pause if the browser tab the game is in loses focus. You can disable that here:
+    // automatically pause if the browser tab the game is in loses focus.
+    // You can disable that here:
     game.stage.disableVisibilityChange = true;
-    //resize your window to see the stage resize too
+    // resize your window to see the stage resize too
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     game.scale.minWidth  = gameWidth  / 2;
