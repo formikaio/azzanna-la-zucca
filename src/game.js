@@ -482,18 +482,15 @@ Press "r" on your keyboard to turn on autoplay.`);
 
         // PLOT BEST POSITIONS, USING SCALE 0-9
         // var maxPositionValue = Math.max.apply(null, winningPigInitialPositions);
-        var u = '';
-        for (i=0;i<tileRows;i++) {
-          for (j=0;j<tileRows;j++) {
-            // var val = Math.round(winningPigInitialPositions[i*tileRows+j] * 9 / maxPositionValue);
-            // u += (val==0) ? "-" : winningPigInitialPositions[i*tileRows+j];
+        let u = '';
+        for (i = 0; i < tileRows; i++) {
+          for (j = 0; j < tileRows; j++) {
             u += winningPigInitialPositions[i * tileRows + j];
             u += ' ';
           }
-          if (i < (tileRows - 1)) u += "\n";
+          if (i < (tileRows - 1)) u += '\n';
         }
-        console.log("Pigs historical best starting positions: \n" + u);
-
+        console.log('Pigs historical best starting positions: \n' + u);
       }
       gameReset();
     }
