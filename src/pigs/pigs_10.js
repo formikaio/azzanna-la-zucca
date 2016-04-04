@@ -3,7 +3,7 @@ import pigs from './pigs_base.js';
 
 var mypigs = _.clone(pigs);
 
-mypigs.privSquadName = 'v9';
+mypigs.privSquadName = 'v10';
 
 mypigs.pigBirthplace = function () {
     var self = this;
