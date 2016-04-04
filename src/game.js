@@ -501,8 +501,8 @@ Press "r" on your keyboard to turn on autoplay.`);
         pigCol.push(toCol(pos));
       });
 
-      let dispersion = _.max(pigRow) - _.min(pigRow) + _.max(pigCol) - _.min(pigCol);
-      console.log(`Last game Dispersion: ${dispersion}`);
+      // let dispersion = _.max(pigRow) - _.min(pigRow) + _.max(pigCol) - _.min(pigCol);
+      // console.log(`Last game Dispersion: ${dispersion}`);
 
       gameReset();
     }
