@@ -9,7 +9,8 @@
 * v7: like v2, looks better 1 step ahead
 * v8: like v4, looks better 2 steps ahead
 * v9: (*BEST) like v2, looks better 2 steps ahead
-* v10: like v9, fixed starting positions [11, 30, 32,	33,	37, 46]
+* v10: like v9, fixed starting positions [11, 30, 32, 33, 37, 46]
+* v11: like v9, fixed starting positions [8,  27, 33, 36, 46, 48]
 
 
 ## PUMPKINS SQUAD
@@ -20,3 +21,8 @@
 * v4: like v2, looks 1 step ahead
 * v5: like v3, looks 1 step ahead
 * v6: (*BEST) like v2, looks 2 steps ahead
+
+
+## RESULTS
+2016-04-04: 6v9  pigs vs 5v6 pumpkins won 786/2875 times (27%), in ~14 rounds
+2016-04-04: 6v10 pigs vs 5v6 pumpkins won 634/2663 times (24%)

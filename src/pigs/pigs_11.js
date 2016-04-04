@@ -3,7 +3,7 @@ import pigs from './pigs_base.js';
 
 var mypigs = _.clone(pigs);
 
-mypigs.privSquadName = 'v10';
+mypigs.privSquadName = 'v11';
 
 mypigs.pigBirthplace = function () {
     var self = this;
@@ -13,7 +13,7 @@ mypigs.pigBirthplace = function () {
       return -1;
     }
 
-    let positions = [11, 30, 32, 33, 37, 46];
+    let positions = [8, 27, 33, 36, 46, 48];
 
     let choice = -1;
 

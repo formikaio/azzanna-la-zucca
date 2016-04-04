@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 import gameUtils from './game_utils.js';
-import robotPigSquad from './pigs/pigs_9.js';
+import robotPigSquad from './pigs/pigs_11.js';
 import robotPumpkinsSquad from './pumpkins/pumpkins_6.js';
 
 
@@ -83,7 +83,7 @@ var init = function () {
 
     // SCORE BUTTON
     game.add.text(292, 114, 'Pumpkins', { font: '20px Arial', fill: 'blue' });
-    scoreText = game.add.text(310, 140, '' + score, { font: '24px Aria', fill: 'blue' });
+    scoreText = game.add.text(310, 140, '' + score, { font: '24px Arial', fill: 'blue' });
     scoreText.x = 330 - scoreText.width / 2;
 
     // SCORE BEST LOCAL CACHE
