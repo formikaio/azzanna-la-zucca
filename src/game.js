@@ -81,8 +81,8 @@ var init = function () {
     game.add.button(362, 33, 'infoButton',  gameInfo, this);
 
     // SCORE BUTTON
-    game.add.text(292, 114, "Pumpkins",{font:"20px Arial", fill:"blue"});
-    scoreText = game.add.text(310, 140, ""+score, {font:"24px Arial", fill:"blue"});
+    game.add.text(292, 114, 'Pumpkins', { font: '20px Arial', fill: 'blue' });
+    scoreText = game.add.text(310, 140, '' + score, { font: '24px Aria', fill: 'blue' });
     scoreText.x = 330 - scoreText.width / 2;
 
     // SCORE BEST LOCAL CACHE
@@ -113,7 +113,7 @@ var init = function () {
   }
 
 
-  function gameInitialize () {
+  function gameInitialize() {
     // STOP THE PLAYER FOR MOVING
     animationQueue = 1;
 
@@ -124,19 +124,19 @@ var init = function () {
     _.each(_.range(tileRows * tileRows), (item) => { fieldArray[item] = 0; });
 
     // listeners for arrow keys
-    var cursors = game.input.keyboard.createCursorKeys();
-    cursors.up   .onDown.add(function () { moveMyTile(0); }, this);
-    cursors.down .onDown.add(function () { moveMyTile(1); }, this);
-    cursors.left .onDown.add(function () { moveMyTile(2); }, this);
-    cursors.right.onDown.add(function () { moveMyTile(3); }, this);
+    let cursors = game.input.keyboard.createCursorKeys();
+    cursors.up.onDown.add(() => { moveMyTile(0); }, this);
+    cursors.down.onDown.add(() => { moveMyTile(1); }, this);
+    cursors.left.onDown.add(() => { moveMyTile(2); }, this);
+    cursors.right.onDown.add(() => { moveMyTile(3); }, this);
 
     // listener for N key
     rKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
-    rKey.onUp.add(gameReset,this);
+    rKey.onUp.add(gameReset, this);
 
     // listener for R key (toggle robot)
     rKey = game.input.keyboard.addKey(Phaser.Keyboard.R);
-    rKey.onUp.add(changeRobot,this);
+    rKey.onUp.add(changeRobot, this);
 
     // LISTENERS FOR TOUCH EVENTS
     hammertime.on('dragend', (ev) => {
@@ -145,6 +145,7 @@ var init = function () {
         case 'down':  moveMyTile(1); break;
         case 'left':  moveMyTile(2); break;
         case 'right': moveMyTile(3); break;
+        default: break;
       }
     });
 
@@ -166,13 +167,13 @@ var init = function () {
     animationQueue--;
   }
 
-  function onUpdate () {
+  function onUpdate() {
     // ROBOT, PLAYS BY ITSELF IF YOU HIT THE "R" KEY
     if (!robotPaused && (game.time.now - timerRobot) > robotSpeed) {
       // RANDOM MOVE
-      //var move = Math.round(Math.random()*4);
+      //let move = Math.round(Math.random()*4);
       // BEST MOVE
-      var move = bestMove();
+      let move = bestMove();
       // BUGFIX: SOMETIMES animationQueue GOES BELOW 0
       if (animationQueue < 0) animationQueue = 0;
       if (animationQueue === 0) moveMyTile(move);
@@ -180,17 +181,17 @@ var init = function () {
     }
   }
 
-  function changeRobot () {
+  function changeRobot() {
     robotPaused = !robotPaused;
   }
 
-  function gameReset () {
+  function gameReset() {
     tileSprites.destroy();
     tilePumpkins.destroy();
     setTimeout(gameInitialize, 400);
   }
 
-  function gameInfo () {
+  function gameInfo() {
     alert(`This is an asymmetrical game.
 Pigs win by lowering the pumpkins number to 2 or less in '+gameTotalRounds+' rounds or less.
 Pumpkins win if they survive to the last round!
@@ -199,27 +200,27 @@ You play the Pigs, with the arrow keys.
 Press "r" on your keyboard to turn on autoplay.`);
   }
 
-  function tweenOpaque (tile) {
+  function tweenOpaque(tile) {
     // creation of a new tween for the tile sprite
     animationQueue++;
     game.add.tween(tile)
-      .to({alpha:1},animationSpeed)    // the tween will make the sprite opaque
+      .to({ alpha: 1 }, animationSpeed)    // the tween will make the sprite opaque
       .start()
-      .onComplete.add(function(){
+      .onComplete.add(() => {
         animationQueue--; // now I can move
       });
   }
 
-  function addObstacle (pos) {
+  function addObstacle(pos) {
     // OBSTACLE VALUE IS 5
     fieldArray[pos] = 5;
 
     // creation of a new sprite with "tile" instance, that is "tile.png" we loaded before
-    var tile = game.add.sprite(toCol(pos)*tileSize+tileOffsetGrid,toRow(pos)*tileSize+tileOffsetGrid+tileOffsetY,"tile");
+    var tile = game.add.sprite(toCol(pos) * tileSize + tileOffsetGrid, toRow(pos) * tileSize + tileOffsetGrid + tileOffsetY, 'tile');
     // creation of a custom property "pos" and assigning it the index of the newly added "2"
     tile.pos = pos;
     // at the beginning the tile is completely transparent
-    tile.alpha=0;
+    tile.alpha = 0;
 
     // adding tile sprites to the group
     tilePumpkins.add(tile);
@@ -231,7 +232,7 @@ Press "r" on your keyboard to turn on autoplay.`);
     // CHOOSING THE BEST EMPTY TILE IN THE FIELD
     var randomValue = robot_pigs_squad.pigBirthplace();
 
-    if (randomValue == -1) {
+    if (randomValue === -1) {
       return;
     }
 
@@ -242,11 +243,11 @@ Press "r" on your keyboard to turn on autoplay.`);
     pigInitialPositions.push(randomValue);
 
     // creation of a new sprite with "tile" instance, that is "tile.png" we loaded before
-    var tile = game.add.sprite(toCol(randomValue)*tileSize+tileOffsetGrid,toRow(randomValue)*tileSize+tileOffsetGrid+tileOffsetY,"pig");
+    var tile = game.add.sprite(toCol(randomValue) * tileSize + tileOffsetGrid, toRow(randomValue) * tileSize+tileOffsetGrid + tileOffsetY, 'pig');
     // creation of a custom property "pos" and assigning it the index of the newly added "2"
     tile.pos = randomValue;
     // at the beginning the tile is completely transparent
-    tile.alpha=0;
+    tile.alpha = 0;
 
     // adding tile sprites to the group
     tileSprites.add(tile);
@@ -258,7 +259,7 @@ Press "r" on your keyboard to turn on autoplay.`);
     // CHOOSING THE BEST EMPTY TILE IN THE FIELD
     var randomValue = robot_pumpkins_squad.pumpkinBirthplace();
 
-    if (randomValue == -1) {
+    if (randomValue === -1) {
       return;
     }
 
@@ -266,11 +267,11 @@ Press "r" on your keyboard to turn on autoplay.`);
     fieldArray[randomValue] = 3;
 
     // creation of a new sprite with "tile" instance, that is "tile.png" we loaded before
-    var tile = game.add.sprite(toCol(randomValue)*tileSize+tileOffsetGrid,toRow(randomValue)*tileSize+tileOffsetGrid+tileOffsetY,"pumpkin");
+    var tile = game.add.sprite(toCol(randomValue) * tileSize + tileOffsetGrid, toRow(randomValue) * tileSize + tileOffsetGrid + tileOffsetY, 'pumpkin');
     // creation of a custom property "pos" and assigning it the index of the newly added "2"
     tile.pos = randomValue;
     // at the beginning the tile is completely transparent
-    tile.alpha=0;
+    tile.alpha = 0;
 
     // adding tile sprites to the group
     tilePumpkins.add(tile);
@@ -457,11 +458,10 @@ Press "r" on your keyboard to turn on autoplay.`);
 
       // IF PIGS WON, STORE INITIAL POSITIONS FOR SOME STATS
       if (pigWon) {
-        console.log(gameTotalPigs + robot_pigs_squad.squadName()
-        + " pigs against "
+        console.log(gameTotalPigs + robot_pigs_squad.squadName() + ' pigs vs '
         + gameStartingPumpkins + robot_pumpkins_squad.squadName()
-        + " pumpkins won "
-        + winningPigGames + "/" + (winningPigGames + losingPigGames) + " times");
+        + ' pumpkins won '
+        + winningPigGames + '/' + (winningPigGames + losingPigGames) + ' times');
 
         winningPigRounds.push(round);
 
@@ -469,12 +469,12 @@ Press "r" on your keyboard to turn on autoplay.`);
         var avgwinningPigRounds = _.reduce(winningPigRounds, function(memo, num) {
       		return memo + num;
       	}, 0) / winningPigRounds.length;
-        console.log("On average Pigs win in " + Math.round(avgwinningPigRounds) + " rounds");
+        console.log('On average Pigs win in ' + Math.round(avgwinningPigRounds) + ' rounds');
         console.log(winningPigRounds);
 
 
         // console.log("Pigs initial positions: " + pigInitialPositions);
-        _.each(pigInitialPositions, function(item) {
+        _.each(pigInitialPositions, (item) => {
           winningPigInitialPositions[item] += 1;
         });
 
@@ -485,8 +485,8 @@ Press "r" on your keyboard to turn on autoplay.`);
           for (j=0;j<tileRows;j++) {
             // var val = Math.round(winningPigInitialPositions[i*tileRows+j] * 9 / maxPositionValue);
             // u += (val==0) ? "-" : winningPigInitialPositions[i*tileRows+j];
-            u += winningPigInitialPositions[i*tileRows+j];
-            u += " ";
+            u += winningPigInitialPositions[i * tileRows + j];
+            u += ' ';
           }
           if (i < (tileRows - 1)) u += "\n";
         }
@@ -522,23 +522,14 @@ Press "r" on your keyboard to turn on autoplay.`);
 
   function setScore() {
     // SOTTRAGGO 6 OSTACOLI (INSERITI TRA I PUMPKINS TEMPORANEAMENTE)
-     score = tilePumpkins.length - 6;
+    score = tilePumpkins.length - 6;
 
-     scoreText.text = Math.max(score, 0);
-     scoreText.x = 330 - scoreText.width / 2;
+    scoreText.text = Math.max(score, 0);
+    scoreText.x = 330 - scoreText.width / 2;
 
-     // MOSTRO IL ROUND NELLO SPAZIO "BEST"
-     scoreTextBest.text = round;
-     scoreTextBest.x = 330 - scoreTextBest.width / 2;
-
-     /*
-     if (score > scoreBest) {
-       scoreBest = score;
-       scoreTextBest.text = scoreBest;
-       scoreTextBest.x = 330 - scoreTextBest.width / 2;
-       window.localStorage.setItem('scoreBest', JSON.stringify(scoreBest));
-     }
-     */
+    // MOSTRO IL ROUND NELLO SPAZIO "BEST"
+    scoreTextBest.text = round;
+    scoreTextBest.x = 330 - scoreTextBest.width / 2;
   }
 };
 
