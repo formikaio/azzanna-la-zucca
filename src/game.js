@@ -472,7 +472,7 @@ Press "r" on your keyboard to turn on autoplay.`);
         let avgwinningPigRounds =
           _.reduce(winningPigRounds, (memo, num) =>	memo + num, 0) / winningPigRounds.length;
         console.log('On average Pigs win in ' + Math.round(avgwinningPigRounds) + ' rounds');
-        console.log(winningPigRounds);
+        // console.log(winningPigRounds);
 
 
         // console.log("Pigs initial positions: " + pigInitialPositions);
