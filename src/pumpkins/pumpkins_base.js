@@ -1,4 +1,4 @@
-import _ from "underscore";
+import _ from 'underscore';
 
 var pumpkins = {
   privSquadName: '--',
@@ -6,20 +6,20 @@ var pumpkins = {
   fieldArray: [],
   tileRows: 0,
 
-  init (game_utils) {
-    this.gu = game_utils;
-    this.fieldArray = game_utils.getFieldArray();
-    this.tileRows   = game_utils.getTileRows();
+  init(gameUtils) {
+    this.gu = gameUtils;
+    this.fieldArray = gameUtils.getFieldArray();
+    this.tileRows = gameUtils.getTileRows();
   },
 
-  squadName () {
+  squadName() {
     return this.privSquadName;
   },
 
-  pumpkinBirthplace () {
-    console.log("PLEASE OVERRIDE THIS FUNCTION IN YOUR SQUAD");
-
+  pumpkinBirthplace() {
     var self = this;
+
+    console.log('PLEASE OVERRIDE THIS FUNCTION IN YOUR SQUAD');
 
     // CONTROLLO SPAZIO FINITO
     if (_.indexOf(this.fieldArray, 0) == -1) {
