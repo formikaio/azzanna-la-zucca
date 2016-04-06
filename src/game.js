@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 import gameUtils from './game_utils.js';
-import robotPigSquad from './pigs/pigs_11.js';
+import robotPigSquad from './pigs/pigs_9.js';
 import robotPumpkinsSquad from './pumpkins/pumpkins_6.js';
 
 
@@ -12,7 +12,7 @@ var init = function () {
 
   // GRAPHIC CONFIG
   // ms TO WAIT X ms BEFORE MAKING A MOVE (ALSO, ANIMATION SPEED IS robotSpeed/3)
-  var robotSpeed = 200;
+  var robotSpeed = 300;
   var tileSize = 48;               // tile width, in pixels
   var tileOffsetGrid = 16;
   var tileOffsetY = 280;
@@ -43,7 +43,7 @@ var init = function () {
 
   // GAME RULES
   var gameTotalRounds = 20;
-  var gameTotalPigs = 6;
+  var gameTotalPigs = 5;
   var gameStartingPumpkins = 5;
 
   // GAMEUTILS & ROBOT INIT
@@ -258,8 +258,12 @@ Press "r" on your keyboard to turn on autoplay.`);
 
 
   function addPumpkin() {
+    if (gameEnded) {
+      return;
+    }
+
     // CHOOSING THE BEST EMPTY TILE IN THE FIELD
-    var randomValue = robotPumpkinsSquad.pumpkinBirthplace();
+    let randomValue = robotPumpkinsSquad.pumpkinBirthplace();
 
     if (randomValue === -1) {
       return;
@@ -419,11 +423,12 @@ Press "r" on your keyboard to turn on autoplay.`);
       }
     });
 
+    _.defer(() => checkDeath());
+
     // AD OGNI MOVIMENTO AGGIUNGO 1 PUMPKINS
     addPumpkin();
 
     animationQueue--;	// LET THE PLAYER MOVE
-    checkDeath();
   }
 
 
@@ -443,7 +448,6 @@ Press "r" on your keyboard to turn on autoplay.`);
       isEnded = true;
       pigWon = true;
     }
-
 
     if (isEnded) {
       gameEnded = true;
@@ -516,6 +520,7 @@ Press "r" on your keyboard to turn on autoplay.`);
     // first, we update the array with new values
     fieldArray[to] = fieldArray[from];
     fieldArray[from] = 0;
+    setScore();
 
     tile.pos = to;
     // then we create a tween
@@ -526,7 +531,6 @@ Press "r" on your keyboard to turn on autoplay.`);
       }, animationSpeed)
       .start()
       .onComplete.add(() => {
-        setScore();
         animationQueue--;
       });
   }
