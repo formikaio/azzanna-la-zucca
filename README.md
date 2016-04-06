@@ -29,8 +29,14 @@ Le regole  complete del gioco sono qui:
 - $ npm install -g webpack webpack-dev-server
 - $ cd CARTELLA
 - $ npm install
+
+Poi, per visualizzare:
 - $ webpack-dev-server
 - puntare il browser su localhost:8080
+
+Per compilare solamente:
+- $ webpack
+
 
 ## TODO
 - pulisci i cicli for, sposta codice mossa pigs nel modulo
