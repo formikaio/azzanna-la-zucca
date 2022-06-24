@@ -12,10 +12,10 @@ Nel simulatore muovi i Maiali, con le frecce su tastiera o tramite swipe da tabl
 Premi **r** sulla tastiera per attivare l'autoplay.
 
 Le regole  complete del gioco sono qui:
-<http://www.formikaio.it/blog/azzanna-la-zucca/>
+<https://www.formikaio.it/blog/azzanna-la-zucca/>
 
 ## Demo online del simulatore
-<http://www.whiletrue.it/azzanna-la-zucca/>
+<https://www.whiletrue.it/azzanna-la-zucca/>
 
 
 ## Librerie utilizzate
